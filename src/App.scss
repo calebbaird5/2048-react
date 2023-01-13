@@ -1,0 +1,265 @@
+$gap: 13px;
+$boardDim: min(80vw, 80vh);
+// $slotDim: calc((#{$boardDim} - 3*#{$gap})/4);
+$slotDim: calc((#{$boardDim} - 5 *#{$gap}) / 4);
+$background-color: #faf8ef;
+$board-color: #cdc1b4;
+$gap-color: #bbada0;
+
+* {
+  box-sizing: border-box;
+}
+
+._2048 {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  background-color: $background-color;
+
+  .header {
+    width: $boardDim;
+    padding: 20px 0;
+    display: flex;
+    justify-content: space-between;
+
+    @media screen and (max-width: 625px) {
+      flex-direction: column;
+    }
+
+    .title {
+      font-size: 80px;
+      font-weight: bold;
+      color: #776e65;
+    }
+
+    .header-right {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      align-items: flex-end;
+      flex: 1;
+      gap: 10px;
+
+      @media screen and (min-width: 626px) {
+        padding-left: 20px;
+      }
+
+      .score {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        background-color: $gap-color;
+        padding: 0 10px;
+        align-items: center;
+        width: 100%;
+
+        .title {
+          font-size: 13px;
+          font-weight: bold;
+          color: #eee4da;
+        }
+
+        .value {
+          color: white;
+          font-size: 25px;
+          font-weight: bold;
+        }
+      }
+      .controlls {
+        display: flex;
+        gap: 10px;
+
+        button {
+          background-color: #8f7a66;
+          color: #f9f6f2;
+          padding: 10px 20px;
+          border-radius: 3px;
+          border: none;
+          font-size: 18px;
+          font-weight: bold;
+
+          &.active {
+            background-color: #bfaa96;
+          }
+        }
+      }
+    }
+  }
+
+  .board {
+    width: $boardDim;
+    height: $boardDim;
+    padding: $gap;
+    position: relative;
+    border-radius: 8px;
+    background-color: $gap-color;
+
+    .slots, .slides {
+      display: grid;
+      grid-gap: $gap;
+      grid-template-columns: 1fr 1fr 1fr 1fr;
+      grid-template-rows: 1fr 1fr 1fr 1fr;
+      width: 100%;
+      height: 100%;
+
+      .slot {
+        height: $slotDim;
+        width: $slotDim;
+        border-radius: 5px;
+      }
+
+      .slot {
+        background-color:$board-color;
+      }
+    }
+
+    .slides {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      padding: $gap;
+      display: block;
+    }
+  }
+}
+
+
+.slide {
+  transition: .5s;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: bolder;
+  position: absolute;
+  width: $slotDim;
+  height: $slotDim;
+  font-size: calc(#{$slotDim} / 2.5);
+
+  &.merged{ z-index: -1 }
+
+  &.slide-enter-active {
+    width: 0;
+    height: 0;
+    margin-left: calc(#{$slotDim} / 2);
+    margin-top: calc(#{$slotDim} / 2);
+    border-radius: 50%;
+    color: $board-color !important;
+    z-index: -1;
+    font-size: 0;
+  }
+
+  &.slide-leave-to-active {
+    $slide-expanded-dim: calc(#{$slotDim} * 1.2);
+    width: $slide-expanded-dim;
+    height: $slide-expanded-dim;
+    margin-left: calc((#{$slide-expanded-dim} - #{$slotDim}) / -2);
+    margin-top: calc((#{$slide-expanded-dim} - #{$slotDim}) / -2);
+    border-radius: 10px;
+  }
+
+  &.x1 {
+    left: $gap;
+  }
+  &.x2 {
+    left: calc(2 * #{$gap} + #{$slotDim});
+  }
+  &.x3 {
+    left: calc(3 * #{$gap} + 2 * #{$slotDim});
+  }
+  &.x4 {
+    left: calc(4 * #{$gap} + 3 * #{$slotDim});
+  }
+  &.y1 {
+    top: $gap;
+  }
+  &.y2 {
+    top: calc(2 * #{$gap} + #{$slotDim});
+  }
+  &.y3 {
+    top: calc(3 * #{$gap} + 2 * #{$slotDim});
+  }
+  &.y4 {
+    top: calc(4 * #{$gap} + 3 * #{$slotDim});
+  }
+
+  &._1_1 {
+    grid-row: 1;
+    grid-column: 1;
+  }
+
+  &._1_4 {
+    grid-row: 1;
+    grid-column: 4;
+  }
+
+  &._2 {
+    background-color: #eee4da;
+    color: #776e65;
+  }
+  &._4 {
+    background-color: #eee1c9;
+    color: #776e65;
+  }
+  &._8 {
+    color: #f9f6f2;
+    background: #f3b27a;
+  }
+  &._16 {
+    color: #f9f6f2;
+    background: #f69664;
+  }
+  &._32 {
+    background-color: #f77c5f;
+    color: #f9f6f2;
+  }
+  &._64 {
+    background-color: #f75f3b;
+    color: #f9f6f2;
+  }
+  &._128 {
+    color: #f9f6f2;
+    background: #edd073;
+    box-shadow: 0 0 30px 10px rgb(243 215 116 / 24%),
+                inset 0 0 0 1px rgb(255 255 255 / 14%);
+    font-size: calc(#{$slotDim} / 3);
+  }
+  &._256 {
+    color: #f9f6f2;
+    background: #edcc62;
+    box-shadow: 0 0 30px 10px rgb(243 215 116 / 32%),
+                inset 0 0 0 1px rgb(255 255 255 / 19%);
+    font-size: calc(#{$slotDim} / 3);
+  }
+  &._512 {
+    color: #f9f6f2;
+    background: #edc950;
+    box-shadow: 0 0 30px 10px rgb(243 215 116 / 40%),
+                inset 0 0 0 1px rgb(255 255 255 / 24%);
+    font-size: calc(#{$slotDim} / 3);
+  }
+  &._1024 {
+    color: #f9f6f2;
+    background: #edc53f;
+    box-shadow: 0 0 30px 10px rgb(243 215 116 / 48%),
+                inset 0 0 0 1px rgb(255 255 255 / 29%);
+    font-size: calc(#{$slotDim} / 3.5);
+  }
+  &._2048 {
+    color: #f9f6f2;
+    background: #edc22e;
+    box-shadow: 0 0 30px 10px rgb(243 215 116 / 56%),
+                inset 0 0 0 1px rgb(255 255 255 / 33%);
+    font-size: 35px;
+    font-size: calc(#{$slotDim} / 3.5);
+  }
+  &.big {
+    color: #f9f6f2;
+    background: #3c3a33;
+    font-size: 30px;
+    font-size: calc(#{$slotDim} / 4);
+  }
+}
